@@ -9,30 +9,51 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  TextEditingController _controller = TextEditingController();
+  TextEditingController controller = TextEditingController();
   FocusNode focusNode = FocusNode();
-  List<String> _searchHistory = [];
-  final int _maxHistoryLength = 10;
+  List<String> searchHistory = [];
+  List<String> searchResults = []; // 검색 결과를 저장할 리스트
+  int maxHistoryLength = 10;
+  List<String> staticList = ['apple', 'banana', 'cherry', 'date', 'elderberry'];
+
 
   @override
   void initState() {
     super.initState();
-    _loadSearchHistory();
+    loadSearchHistory();
   }
 
-  _loadSearchHistory() async {
+  void loadSearchHistory() async {
     final prefs = await SharedPreferences.getInstance();
-    _searchHistory = prefs.getStringList('searchHistory') ?? [];
+    searchHistory = prefs.getStringList('searchHistory') ?? [];
     setState(() {});
   }
 
-  _saveSearchTerm(String term) async {
+  void saveSearchTerm(String term) async {
     final prefs = await SharedPreferences.getInstance();
-    _searchHistory.add(term);
-    if (_searchHistory.length > _maxHistoryLength) {
-      _searchHistory.removeRange(0, _searchHistory.length - _maxHistoryLength);
+    searchHistory.add(term);
+    if (searchHistory.length > maxHistoryLength) {
+      searchHistory.removeRange(0, searchHistory.length - maxHistoryLength);
     }
-    await prefs.setStringList('searchHistory', _searchHistory);
+    await prefs.setStringList('searchHistory', searchHistory);
+    search(term); // 검색어 저장 후 검색 실행
+
+    setState(() {});
+  }
+
+  void search(String searchTerm) {
+    searchResults = staticList
+        .where((element) => element.contains(searchTerm))
+        .toList();
+    if (searchResults.isNotEmpty) {
+      // 검색 결과가 있으면 콘솔에 출력
+      print('검색 결과:');
+      for (var result in searchResults) {
+        print(result);
+      }
+    } else {
+      print('검색 결과가 없습니다.');
+    }
     setState(() {});
   }
 
@@ -49,7 +70,7 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                   TextFormField(
                     focusNode: focusNode,
-                    controller: _controller,
+                    controller: controller,
                     keyboardType: TextInputType.text,
                     style: const TextStyle(fontSize: 14.0, color: Colors.black),
                     decoration: InputDecoration(
@@ -58,9 +79,9 @@ class _SearchPageState extends State<SearchPage> {
                       suffixIcon: IconButton(
                         icon: Icon(Icons.search),
                         onPressed: () {
-                          if (_controller.text.isNotEmpty) {
-                            _saveSearchTerm(_controller.text);
-                            _controller.clear();
+                          if (controller.text.isNotEmpty) {
+                            saveSearchTerm(controller.text);
+                            controller.clear();
                           }
                         },
                       ),
@@ -68,10 +89,10 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: _searchHistory.length,
+                      itemCount: searchHistory.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(_searchHistory[_searchHistory.length - index - 1]),
+                          title: Text(searchHistory[searchHistory.length - index - 1]),
                         );
                       },
                     ),
