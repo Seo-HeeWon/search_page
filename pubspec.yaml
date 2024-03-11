@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.6
   advanced_search: ^2.2.3
   shared_preferences: ^2.2.2
+  flutter_riverpod: ^2.4.10
 
 dev_dependencies:
   flutter_test:

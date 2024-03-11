@@ -80,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
   void removeSearch(int index) async {
     final prefs = await SharedPreferences.getInstance();
 
-    // index 위치의 항목을 제거 
+    // index 위치의 항목을 제거
     searchHistory.remove(searchHistory[index]);
 
     // 변경된 검색 기록을 SharedPreferences에 저장
