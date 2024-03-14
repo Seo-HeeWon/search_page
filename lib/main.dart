@@ -61,8 +61,8 @@ class MyHomePage extends StatelessWidget {
                 child: const Text("riverPod"),
               ),
               ElevatedButton(
-                onPressed: () => Get.to(() => const RiverPodWatch()),
-                child: const Text("ref.watch"),
+                onPressed: () => context.go('/refwatch'),
+                child: const Text('refwatch'),
               ),
               ElevatedButton(
                 onPressed: () => context.go('/riverPodPagedListView'),

@@ -55,8 +55,6 @@ class RiverPodWatch extends ConsumerWidget {
               ElevatedButton(
                 onPressed: () {
 
-                  // 이 버튼 클릭은 현재 상태에서 특별한 동작을 하지 않음
-                  // 필요하다면 여기에 추가 동작을 구현할 수 있습니다.
                 },
                 child: const Text("확인"),
               ),
